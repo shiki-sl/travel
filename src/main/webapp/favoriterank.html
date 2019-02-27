@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>收藏排行榜</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/ranking-list.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+</head>
+<body>
+<!--引入头部-->
+<div id="header"></div>
+<div class="contant" id="body">
+    <div class="shaixuan">
+        <span>线路名称</span>
+        <input type="text" v-model="rname">
+        <span>金额</span>
+        <input type="text" v-model="min">~<input type="text" v-model="max">
+        <button @click="sousuo">搜索</button>
+        <button @click="filter">只看收藏</button>
+    </div>
+    <div class="list clearfix">
+        <ul id="div_ul_li">
+            <li v-for="(item,i) in list" :key='i'>
+                <span :class="{'num':i>1,'num one':i==0,'num two':i==1}">{{i+1}}</span>
+                <a :href="'route_detail.html?rid='+item.rid"><img :src="''+item.rimage" alt=""></a>
+                <h4><a href="route_detail.html">{{item.rname}}</a></h4>
+                <p>
+                    <b class="price">&yen;<span>{{item.price}}</span>起</b>
+                    <span class="shouchang">收藏人数{{item.count}}</span>
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div class="pageNum">
+        <ul>
+            <li><a href="">首页</a></li>
+            <li class="threeword"><a href="#">上一页</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">6</a></li>
+            <li><a href="#">7</a></li>
+            <li><a href="#">8</a></li>
+            <li><a href="#">9</a></li>
+            <li><a href="#">10</a></li>
+            <li class="threeword"><a href="javascript:;">下一页</a></li>
+            <li class="threeword"><a href="javascript:;">末页</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--导入底部-->
+<div id="footer"></div>
+<!--导入布局js，共享header和footer-->
+<script type="text/javascript" src="js/include.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#body',
+        data: {
+            rname: '',
+            min: '',
+            max: '',
+            list: []
+        },
+        methods: {
+            sousuo() {
+                var _this = this;
+                axios.get('routeServlet/rankingList', {
+                    params: {
+                        rname: _this.rname,
+                        min: _this.min,
+                        max: _this.max,
+                        currentPage: _this.currentPage,
+                        pageSize: _this.pageSize
+                    }
+                }).then(
+                    function (value) {
+                        _this.list = value.data
+                    }
+                ).catch(function (reason) {
+                    console.log(reason)
+                })
+            },
+            filter() {
+                this.list=this.list.filter((item) =>  item.count > 0)
+            }
+        },
+        created() {
+            this.sousuo()
+        }
+    })
+</script>
+</body>
+</html>

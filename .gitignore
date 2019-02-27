@@ -1,0 +1,6 @@
+/.idea
+*.ini
+*.iml
+*.class
+*.war
+/text

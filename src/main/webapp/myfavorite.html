@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>黑马旅游网-我的收藏</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+        .tab-content .row > div {
+            margin-top: 16px;
+        }
+
+        .tab-content {
+            margin-bottom: 36px;
+        }
+    </style>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/getParameter.js"></script>
+    <script>
+        var uid = getParameter("uid");
+        var currentPage = getParameter("currentPage");
+        var pageSize = getParameter("pageSize");
+        var totalPage = getParameter("totalPage");
+        var rname = getParameter("rname");
+        $(function () {
+            loadFavorite(uid, rname, currentPage, totalPage)
+        })
+
+        function loadFavorite(uid, rname, currentPage, totalPage) {
+            $.get("user/query4UserFavorite",
+                {
+                    uid: uid,
+                    ranme: rname,
+                    pageSize: 12,
+                    totalPage: totalPage,
+                    currentPage: currentPage
+                },
+                function (data) {
+                    if (data != null) {
+                        var divs = "";
+                        var ul_li = '<li onclick="javascipt:loadFavorite(' + uid + ',\'' + rname + '\',' + 0 + ',' + totalPage + ');">' +
+                            '<a href="">首页</a></li>\n' +
+                            '                <li onclick="javascipt:loadFavorite(' + uid + ',\'' + rname + '\',' + (currentPage - 1) + ','
+                            + totalPage + ');" class="threeword"><a href="#">上一页</a></li>';
+                        for (var i = 0; i < data[0].length; i++) {
+                            divs += '<div class="col-md-3">\n' +
+                                '                            <a href="route_detail.html?rid=' + data[0][i].rid + '">\n' +
+                                '                                <img src="' + data[0][i].rimage + '" alt="">\n' +
+                                '                                <div class="has_border">\n' +
+                                '                                    <h3>' + data[0][i].rname + '</h3>\n' +
+                                '                                    <div class="price">网付价<em>￥</em><strong>' + data[0][i].price + '</strong><em>起</em></div>\n' +
+                                '                                </div>\n' +
+                                '                            </a>\n' +
+                                '                        </div>'
+                        }
+
+                        for (var i = 1; i <= data[1].totalPage; i++) {
+                            ul_li += '<li onclick="javascipt:loadFavorite(' + uid + ',\'' + rname + '\',' + (i - 1) + ','
+                                + totalPage + ');"><a href="#">' + i + '</a></li>';
+                        }
+                        $("#myFavoriteDiv").html(divs);
+
+                        currentPage += 1;
+                        totalPage = data[1].totalPage;
+                        if (currentPage >= totalPage - 1) {
+                            currentPage = totalPage - 1;
+                        }
+
+                        ul_li +=
+                            '<li onclick="javascipt:loadFavorite(' + uid + ',\'' + rname + '\',' + currentPage + ','
+                            + totalPage + ');" class="threeword"><a href="javascript:;">下一页</a></li>\n' +
+                            '                <li onclick="javascipt:loadFavorite(' + uid + ',\'' + rname + '\',' +
+                            (totalPage - 1) + ',' + totalPage + ');" class="threeword"><a href="javascript:;">末页</a></li>'
+                        $("#myFavoriteDiv_ul_li\n").html(ul_li);
+                    } else {
+                        $("#myFavoriteDiv").html('<h1 style="align-content: center">尚未登录,请登录</h1>')
+                    }
+                }
+            )
+        }
+    </script>
+</head>
+<body>
+<!--引入头部-->
+<div id="header"></div>
+<!-- 排行榜 start-->
+<section id="content">
+    <section class="hemai_jx">
+        <div class="jx_top">
+            <div class="jx_tit">
+                <img src="images/icon_5.jpg" alt="">
+                <span>我的收藏</span>
+            </div>
+        </div>
+        <div class="jx_content">
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div id="myFavoriteDiv" class="row">
+                        <div class="col-md-3">
+                            <a id="myFavorite_href" href="route_detail.html">
+                                <img src="images/collection_pic.jpg" alt="">
+                                <div class="has_border">
+                                    <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
+                                    <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pageNum">
+            <ul id="myFavoriteDiv_ul_li">
+                <li><a href="">首页</a></li>
+                <li class="threeword"><a href="#">上一页</a></li>
+                <!--<li><a href="#">1</a></li>-->
+                <li class="threeword"><a href="javascript:;">下一页</a></li>
+                <li class="threeword"><a href="javascript:;">末页</a></li>
+            </ul>
+        </div>
+    </section>
+</section>
+<!-- 排行榜 end-->
+
+<!--引入尾部-->
+<div id="footer"></div>
+<!--导入布局js，共享header和footer-->
+<script type="text/javascript" src="js/include.js"></script>
+</body>
+</html>

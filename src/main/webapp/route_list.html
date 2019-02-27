@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>黑马旅游-搜索</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" href="css/search.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/getParameter.js"></script>
+    <script>
+        $(function () {
+            var cid = getParameter("cid");
+            var rname = getParameter("rname");
+            if (rname) {
+                rname = window.decodeURIComponent(rname);
+            }
+            var currentPage = getParameter("currentPage");
+            load(cid, rname, currentPage, null);
+            sousuo();
+        })
+
+        function sousuo() {
+            $.getJSON(
+                "routeServlet/rankingList",
+                {},
+                function (data) {
+                    var lis = '';
+                    for (var i = 0; i < data.length; i++) {
+                        lis += '<li>\n' +
+                            '                        <div class="left"><img src="' + data[i].rimage + '" alt=""></div>\n' +
+                            '                        <div class="right">\n' +
+                            '                            <p>' + data[i].rname + '</p>\n' +
+                            '                            <p>网付价<span>&yen;<span>' + data[i].price + '</span>起</span>\n' +
+                            '                            </p>\n' +
+                            '                        </div>\n' +
+                            '                    </li>'
+                    }
+                    $("#hot_ul_li").html(lis);
+                }
+            )
+        }
+
+        function load(cid, rname, currentPage, totalPage) {
+            window.location.href = "#pMark"
+            if (currentPage === "null") {
+                currentPage = 1;
+            }
+            if (currentPage < 1) {
+                currentPage = 1;
+            }
+
+            $.get("routeServlet/findQuery",
+                {
+                    cid: cid,
+                    currentPage: currentPage,
+                    rname: rname,
+                    totalPage: totalPage
+                },
+                function (data) {
+                    if (data != null) {
+
+                        /**
+                         * 分页展示条
+                         */
+                        totalPage = data.totalPage;
+                        if (currentPage > totalPage) {
+                            currentPage = totalPage;
+                        }
+                        var lis = "";
+                        lis +=
+                            '<li class="threeword" onclick="javascipt:load(' + cid + ', \'' + rname + '\', 1, ' + totalPage + ');"> <a href="javascript:void(0)">首页</a></li>';
+                        lis +=
+                            '<li class="threeword" onclick="javascipt:load(' + cid + ', \'' + rname + '\', ' + (+currentPage - 1) + ', ' + totalPage + ')"> ' +
+                            '<a href="javascript:void(0);">上一页</a></li>';
+                        $("#sum").html(totalPage);
+                        $("#count").html(data.totalCount);
+
+                        /**
+                         * 对currentPage和totalPage进行赋值
+                         */
+                        var index;
+                        var max;
+                        if (currentPage < 5) {
+
+                            index = 1;
+                            if (totalPage <= 10) {
+                                max = totalPage;
+                            } else {
+                                max = 10;
+                            }
+                        }
+                        if (currentPage > (totalPage - 4)) {
+                            if (totalPage - 9 <= 0) {
+                                index = 1;
+                                max = totalPage;
+                            } else {
+                                index = totalPage - 9;
+                                max = totalPage;
+                            }
+                        }
+                        if (currentPage >= 5 && currentPage <= (totalPage - 4)) {
+                            index = currentPage - 5;
+                            max = +currentPage + 4;
+                        }
+
+                        for (var i = index; i <= max; i++) {
+                            if (i == currentPage) {
+                                lis +=
+                                    '<li class="curPage" onclick="javascipt:load(' + cid + ',\'' + rname + '\', ' + i + ',' + totalPage + ')">' +
+                                    '<a href="javascipt:void(0);">' + i + '</a></li>';
+                            } else {
+                                lis +=
+                                    '<li onclick="javascipt:load(' + cid + ', \'' + rname + '\', ' + i + ', ' + totalPage + ')">' +
+                                    ' <a href="javascript:void(0)">' + i + '</a></li>';
+                            }
+                        }
+                        currentPage = ((+currentPage + 1) > totalPage ? totalPage : (+currentPage + 1))
+                        lis +=
+                            '<li class="threeword" onclick="load(' + cid + ',\'' + rname + '\', ' + currentPage + ', ' + totalPage + ');"> ' +
+                            '<a href="javascript:void(0)">下一页</a></li>';
+                        lis +=
+                            '<li class="threeword" onclick="javascipt:load(' + cid + ',\'' + rname + '\', ' + totalPage + ', ' + totalPage + ');"> ' +
+                            '<a href="javascript:void(0)">末页</a></li>';
+                        $("#ul_li").html(lis);
+                    }
+
+                    var lits = "";
+                    for (var i = 0; i < data.list.length; i++) {
+                        lits += '<li>\n' +
+                            '<div class="img"><img src="' + data.list[i].rimage + '" style="width: 299px;"></div>\n' +
+                            '<div class="text1">\n' +
+                            '<p>' + data.list[i].rname + '</p>\n' +
+                            '<br/>\n' +
+                            '<p>' + data.list[i].routeIntroduce + '</p>\n' +
+                            '</div>\n' +
+                            '<div class="price">\n' +
+                            '<p class="price_num">\n' +
+                            '<span>&yen;</span>\n' +
+                            '<span>' + data.list[i].price + '</span>\n' +
+                            '<span>起</span>\n' +
+                            '</p>\n' +
+                            '<p><a href="route_detail.html?rid=' + data.list[i].rid + '">查看详情</a></p>\n' +
+                            '</div>\n' +
+                            '</li>'
+                    }
+                    $("#massage").html(lits);
+                    // var pathname = location.pathname;
+                    //
+                    // // window.onbeforeunload = function(){
+                    // //     location.href =
+                    // //         pathname+"?cid="+cid+"&rname="+rname+"&currentPage="+currentPage+"&totalPage="+totalPage+"sadsads";
+                    // // }
+                    //
+                    // history.pushState(null, null, pathname + "?cid=" + cid + "&rname=" + rname + "&currentPage=" + currentPage + "&totalPage=" + totalPage)
+
+                }
+            )
+        }
+    </script>
+</head>
+<body>
+<!--引入头部-->
+<div id="header"></div>
+<div class="page_one">
+    <div class="contant">
+        <div class="crumbs">
+            <img src="images/search.png" alt="">
+            <p id="pMark">黑马旅行><span>搜索结果</span></p>
+        </div>
+        <div class="xinxi clearfix">
+            <div class="left">
+                <div class="header">
+                    <span>商品信息</span>
+                    <span class="jg">价格</span>
+                </div>
+                <ul id="massage">
+                    <!--<li>-->
+                    <!--<div class="img"><img src="images/04-search_03.jpg" alt=""></div>-->
+                    <!--<div class="text1">-->
+                    <!--<p>【减100元 含除夕/春节出发】广州增城三英温泉度假酒店/自由行套票</p>-->
+                    <!--<br/>-->
+                    <!--<p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>-->
+                    <!--</div>-->
+                    <!--<div class="price">-->
+                    <!--<p class="price_num">-->
+                    <!--<span>&yen;</span>-->
+                    <!--<span>299</span>-->
+                    <!--<span>起</span>-->
+                    <!--</p>-->
+                    <!--<p><a href="route_detail.html">查看详情</a></p>-->
+                    <!--</div>-->
+                    <!--</li>-->
+                </ul>
+                <div class="page_num_inf">
+                    <i></i> 共
+                    <span id="sum"></span>页<span id="count"></span>条
+                </div>
+                <div class="pageNum">
+                    <ul id="ul_li">
+                        暂无旅游路线
+                    </ul>
+                </div>
+            </div>
+            <div class="right">
+                <div class="top">
+                    <div class="hot">HOT</div>
+                    <span>热门推荐</span>
+                </div>
+                <ul id="hot_ul_li">
+                    <li>
+                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
+                        <div class="right">
+                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
+                            <p>网付价<span>&yen;<span>899</span>起</span>
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
+                        <div class="right">
+                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
+                            <p>网付价<span>&yen;<span>899</span>起</span>
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
+                        <div class="right">
+                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
+                            <p>网付价<span>&yen;<span>899</span>起</span>
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
+                        <div class="right">
+                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
+                            <p>网付价<span>&yen;<span>899</span>起</span>
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
+                        <div class="right">
+                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
+                            <p>网付价<span>&yen;<span>899</span>起</span>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--引入头部-->
+<div id="footer"></div>
+<!--导入布局js，共享header和footer-->
+<script type="text/javascript" src="js/include.js"></script>
+</body>
+
+</html>

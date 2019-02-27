@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--导入资源文件-->
+    <properties resource="jdbcConfig.properties"></properties>
+    <!--是否使用缓存-->
+    <settings>
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+    <!--使用typeAliases配置别名，它只能配置domain中类的别名-->
+    <typeAliases>
+        <package name="com.itheima.domain"></package>
+    </typeAliases>
+    <!--配置环境-->
+    <environments default="mysql">
+        <!--配置mysql环境-->
+        <environment id="mysql">
+            <!--配置事务-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--配置连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--配置映射文件-->
+    <mappers>
+        <package name="com.itheima.dao"/>
+        <!--<mapper resource="com/itheima/dao/dao.xml"/>-->
+    </mappers>
+</configuration>
