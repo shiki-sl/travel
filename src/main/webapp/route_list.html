@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" href="css/search.css">
     <script src="js/jquery-3.3.1.js"></script>
-    <script src="js/getParameter.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/axios.js"></script>
 </head>
@@ -29,27 +28,29 @@
                     <span>商品信息</span>
                     <span class="jg">价格</span>
                 </div>
+
                 <ul id="massage">
-                    <!--<li>-->
-                    <!--<div class="img"><img src="images/04-search_03.jpg" alt=""></div>-->
-                    <!--<div class="text1">-->
-                    <!--<p>【减100元 含除夕/春节出发】广州增城三英温泉度假酒店/自由行套票</p>-->
-                    <!--<br/>-->
-                    <!--<p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>-->
-                    <!--</div>-->
-                    <!--<div class="price">-->
-                    <!--<p class="price_num">-->
-                    <!--<span>&yen;</span>-->
-                    <!--<span>299</span>-->
-                    <!--<span>起</span>-->
-                    <!--</p>-->
-                    <!--<p><a href="route_detail.html">查看详情</a></p>-->
-                    <!--</div>-->
-                    <!--</li>-->
+                    <li v-for="item in routeList">
+                        <div class="img"><img :src="''+item.rimage" alt=""></div>
+                        <div class="text1">
+                            <p>{{item.rname}}</p>
+                            <br/>
+                            <p>{{item.routeIntroduce}}</p>
+                        </div>
+                        <div class="price">
+                            <p class="price_num">
+                                <span>&yen;</span>
+                                <span>{{item.price}}</span>
+                                <span>起</span>
+                            </p>
+                            <p><a :href="'route_detail.html?rid='+item.rid">查看详情</a></p>
+                        </div>
+                    </li>
+
                 </ul>
                 <div class="page_num_inf">
                     <i></i> 共
-                    <span id="sum"></span>页<span id="count"></span>条
+                    <span id="sum"></span>页<span id="count">1</span>条
                 </div>
                 <div class="pageNum">
                     <ul id="ul_li">
@@ -63,43 +64,11 @@
                     <span>热门推荐</span>
                 </div>
                 <ul id="hot_ul_li">
-                    <li>
-                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
+                    <li v-for="item in hotList" @click="routeDetail(item.rid)">
+                        <div class="left"><img :src="''+item.rimage" alt=""></div>
                         <div class="right">
-                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
-                            <p>网付价<span>&yen;<span>899</span>起</span>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
-                        <div class="right">
-                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
-                            <p>网付价<span>&yen;<span>899</span>起</span>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
-                        <div class="right">
-                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
-                            <p>网付价<span>&yen;<span>899</span>起</span>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
-                        <div class="right">
-                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
-                            <p>网付价<span>&yen;<span>899</span>起</span>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="left"><img src="images/04-search_09.jpg" alt=""></div>
-                        <div class="right">
-                            <p>清远新银盏温泉度假村酒店/自由行套...</p>
-                            <p>网付价<span>&yen;<span>899</span>起</span>
+                            <p>{{item.rname}}</p>
+                            <p>网付价<span>&yen;<span>{{item.price}}</span>起</span>
                             </p>
                         </div>
                     </li>
@@ -117,42 +86,49 @@
 <script>
     var vm = new Vue({
         el: '#route_list',
-        data: {},
-        methods: {},
-        create: {}
-    })
+        data: {
+            cid: '',
+            rname: '',
+            currentPage: '',
+            totalPage:'',
 
-    $(function () {
-        var cid = getParameter("cid");
-        var rname = getParameter("rname");
-        if (rname) {
-            rname = window.decodeURIComponent(rname);
-        }
-        var currentPage = getParameter("currentPage");
-        load(cid, rname, currentPage, null);
-        sousuo();
-    })
+            hotList: [],
+            routeList: []
+        },
+        methods: {
+            getParameter(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var r = location.search.substr(1).match(reg);
+                if (r != null) return (r[2]);
+                return null;
+            },
 
-    function sousuo() {
-        $.getJSON(
-            "routeServlet/rankingList",
-            {},
-            function (data) {
-                var lis = '';
-                for (var i = 0; i < data.length; i++) {
-                    lis += '<li>\n' +
-                        '                        <div class="left"><img src="' + data[i].rimage + '" alt=""></div>\n' +
-                        '                        <div class="right">\n' +
-                        '                            <p>' + data[i].rname + '</p>\n' +
-                        '                            <p>网付价<span>&yen;<span>' + data[i].price + '</span>起</span>\n' +
-                        '                            </p>\n' +
-                        '                        </div>\n' +
-                        '                    </li>'
-                }
-                $("#hot_ul_li").html(lis);
+            sousuo() {
+                var _this = this;
+                axios.get("routeServlet/rankingList").then(function (value) {
+                    _this.hotList = value.data
+                }).catch(function (reason) {
+                    console.log(reason)
+                })
+            },
+
+            routeDetail(rid) {
+                location.href = "route_detail.html?rid=" + rid;
             }
-        )
-    }
+
+        },
+        created() {
+            var cid = this.getParameter("cid");
+            var rname = this.getParameter("rname");
+            if (rname) {
+                rname = window.decodeURIComponent(rname);
+            }
+            var currentPage = this.getParameter("currentPage");
+            load(cid, rname, currentPage, null);
+            this.sousuo();
+        }
+    })
+
 
     function load(cid, rname, currentPage, totalPage) {
         window.location.href = "#pMark"
@@ -258,14 +234,6 @@
                         '</li>'
                 }
                 $("#massage").html(lits);
-                // var pathname = location.pathname;
-                //
-                // // window.onbeforeunload = function(){
-                // //     location.href =
-                // //         pathname+"?cid="+cid+"&rname="+rname+"&currentPage="+currentPage+"&totalPage="+totalPage+"sadsads";
-                // // }
-                //
-                // history.pushState(null, null, pathname + "?cid=" + cid + "&rname=" + rname + "&currentPage=" + currentPage + "&totalPage=" + totalPage)
 
             }
         )

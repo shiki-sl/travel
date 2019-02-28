@@ -1,5 +1,6 @@
 package cn.itcast.travel.util;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 /**
@@ -20,7 +21,7 @@ public final class Md5Util {
         //Java中MessageDigest类封装了MD5和SHA算法，今天我们只要MD5算法
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         //调用MD5算法，即返回16个byte类型的值
-        byte[] byteArray = md5.digest(password.getBytes());
+        byte[] byteArray = md5.digest(password.getBytes(StandardCharsets.UTF_8));
         //注意：MessageDigest只能将String转成byte[]，接下来的事情，由我们程序员来完成
         return byteArrayToHexString(byteArray);
     }
