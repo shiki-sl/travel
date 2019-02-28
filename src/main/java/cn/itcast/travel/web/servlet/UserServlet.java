@@ -70,9 +70,10 @@ public class UserServlet extends BaseServlet {
             }
             if (!value.equals(auto_login)) {
                 Cookie userCookie = new Cookie("userCookie", username+"-"+password+"-"+false);
-                userCookie.setMaxAge(60 * 60 * 24 * 180);
+                userCookie.setMaxAge(0);
                 userCookie.setPath("/");
                 response.addCookie(userCookie);
+                writeValue(response, resultInfo);
             }
         } else {
             resultInfo.setFlag(false);
@@ -133,6 +134,8 @@ public class UserServlet extends BaseServlet {
         String check = request.getParameter("check");
         String checkCodeServer = (String) request.getSession().getAttribute("CHECKCODE_SERVER");
         //当验证码为空(用户回退页面)或验证码不匹配,则向html返回错误信息
+        System.out.println(checkCodeServer);
+        System.out.println(check);
         if (checkCodeServer == null) {
             return false;
         }

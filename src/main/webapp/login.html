@@ -13,8 +13,6 @@
     <!--[if lt IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <script src="js/vue.js"></script>
-    <script src="js/axios.js"></script>
     <![endif]-->
     <!--导入angularJS文件-->
     <!--找不到文件-->
@@ -29,8 +27,8 @@
                     {
                         username: $("#username").val(),
                         password: $("#password").val(),
-                        check:$("#check").val(),
-                        auto_login:$("#auto_login")[0].checked
+                        check: $("#check").val(),
+                        auto_login: $("#auto_login")[0].checked
                     },
                     function f(data) {
                         if (data.flag) {
@@ -43,13 +41,6 @@
                 )
                 return false;
             });
-        })
-
-        var vm = new Vue({
-            el:'#login_wrap',
-            data:{},
-            methods:{},
-
         })
     </script>
 </head>
@@ -87,7 +78,8 @@
                 </div>
                 <div class="submit_btn" style="align-self: center">
                     <!--<button type="button">登录</button>-->
-                    <input type="submit" style="height: 35px;width: 200px; align-self: center ;background-color: #ffc900;"  value="登录">
+                    <input type="submit"
+                           style="height: 35px;width: 200px; align-self: center ;background-color: #ffc900;" value="登录">
                     <div class="auto_login">
                         <input type="checkbox" id="auto_login" name="auto_login" class="checkbox">
                         <span>自动登录</span>
