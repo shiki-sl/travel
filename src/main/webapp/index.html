@@ -30,15 +30,10 @@
     <![endif]-->
     <script src="js/vue.js"></script>
     <script src="js/axios.js"></script>
-
-
-
-
 </head>
 <body>
 <!--引入头部-->
 <div id="header"></div>
-<div id="footer"></div>
 <div id="index">
     <!-- banner start-->
     <section id="banner">
@@ -445,20 +440,21 @@
         )
     }
 
-    var vm = new Vue({
-        el: '#index',
-        data: {
-            list: [],
-        },
-        methods: {
-
-        },
-        created() {
-            var _this = this
-            axios.get("categoryServlet/findAll").then(function(value){_this.list=value.data})
-        },
-    })
+    // var vm = new Vue({
+    //     el: '#index',
+    //     data: {
+    //         list: [],
+    //     },
+    //     methods: {
+    //
+    //     },
+    //     created() {
+    //         var _this = this
+    //         axios.get("categoryServlet/findAll").then(function(value){_this.list=value.data})
+    //     },
+    // })
 
 </script>
+<div id="footer"></div>
 </body>
 </html>

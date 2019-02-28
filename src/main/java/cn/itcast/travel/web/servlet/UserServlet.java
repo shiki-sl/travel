@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +71,7 @@ public class UserServlet extends BaseServlet {
             }
             if (!value.equals(auto_login)) {
                 Cookie userCookie = new Cookie("userCookie", username+"-"+password+"-"+false);
-                userCookie.setMaxAge(0);
+                userCookie.setMaxAge(60 * 60 * 24 * 180);
                 userCookie.setPath("/");
                 response.addCookie(userCookie);
                 writeValue(response, resultInfo);
@@ -136,6 +137,8 @@ public class UserServlet extends BaseServlet {
         //当验证码为空(用户回退页面)或验证码不匹配,则向html返回错误信息
         System.out.println(checkCodeServer);
         System.out.println(check);
+        request.getParameterMap().forEach((key,value)-> System.out.println(key+":"+ Arrays.toString(value)));
+        System.out.println("-------");
         if (checkCodeServer == null) {
             return false;
         }

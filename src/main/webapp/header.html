@@ -1,38 +1,22 @@
 <!-- 头部 start --><!---->
-
 <script>
-
-    var cid = getParameter("cid");
-    var rname = getParameter("rname");
-    if (rname) {
-        rname = window.decodeURIComponent(rname);
-    }
-    var currentPage = getParameter("currentPage");
-    var totalPage = getParameter("totalPage");
-    if (currentPage < 1) {
-        currentPage = 1;
-    }
-    if (currentPage > totalPage) {
-        currentPage = totalPage;
-    }
-
     var vm = new Vue({
         el: '#top',
         data: {
-            cid: cid,
-            currentPage: currentPage,
-            totalPage: totalPage,
+            cid: '',
+            currentPage: '',
+            totalPage: '',
             rname: '',
 
             uid_input: '',
             username_login: '请登录',
+            headerList: [{cid: 1, cname: 'shiki'}],
             myfavorite: '',
-            list: []
         },
         methods: {
             exit() {
-                _this = this
-                axios.get("user/exit").then(function (value) {
+                var _this = this;
+                axios.get("user/exit").then(function () {
                     _this.username_login = '请登录'
                 })
             },
@@ -40,13 +24,28 @@
                 if (this.username_login === '请登录') {
                     location.href = "login.html"
                 }
+            },
+            checkThis() {
+                function getParameter(name) {
+                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                    var r = location.search.substr(1).match(reg);
+                    if (r != null) return (r[2]);
+                    return null;
+                }
+
+                this.data.cid = getParameter('cid');
+                this.data.currentPage = getParameter('currentPage');
+                this.data.totalPage = getParameter('totalPage');
+                this.data.rname = getParameter('rname');
             }
         },
         created() {
             var _this = this
             axios.get("categoryServlet/findAll").then(function (value) {
-                _this.list = value.data
+                _this.headerList = value.data
+                console.log(_this.headerList)
             })
+
             axios.get("user/username").then(function (value) {
                 if (value.data.flag) {
                     _this.uid_input = value.data.errorMsg.split(":")[0]
@@ -56,10 +55,11 @@
         },
     })
 </script>
-<header id="header">
-    <!--数据-->
-    <div id="top">
-        <input type="hidden" v-method="uid_input">
+<div id="top">
+    <header id="header">
+        <!--数据-->
+
+        <input type="hidden" v-model="uid_input">
         <div class="top_banner">
             <img src="images/top_banner.jpg" alt="">
         </div>
@@ -86,7 +86,7 @@
                     <input name="" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off"
                            v-model="rname">
                     <a :href="'route_list.html?cid=' + cid + '&currentPage=' + currentPage + '&totalPage=' + totalPage + '&rname=' + rname"
-                       class="search-button">搜索</a>
+                       class="search-button" @click="checkThis">搜索</a>
                 </div>
                 <div class="hottel">
                     <div class="hot_pic">
@@ -99,14 +99,17 @@
                 </div>
             </div>
         </div>
+
+    </header>
+    <!-- 头部 end -->
+    <!-- 首页导航 -->
+    <div class="navitem">
+        <ul class="nav">
+            <li class="nav-active"><a href="index.html">首页</a></li>
+            <li v-for="item in headerList" :key='i'><a :href="'route_list.html?cid='+item.cid">{{item.cname}}</a></li>
+            <li><a href="favoriterank.html">收藏排行榜</a></li>
+        </ul>
     </div>
-</header>
-<!-- 头部 end -->
-<!-- 首页导航 -->
-<div class="navitem">
-    <ul class="nav">
-        <li class="nav-active"><a href="index.html">首页</a></li>
-        <li v-for="item in list"><a :href="'route_list.html?cid='+item.cid">{{item.cname}}</a></li>
-        <li><a href="favoriterank.html">收藏排行榜</a></li>
-    </ul>
 </div>
+<!--<script src="js/vue.js"></script>-->
+<!--<script src="js/axios.js"></script>-->
