@@ -106,7 +106,7 @@
     <div class="navitem">
         <ul class="nav">
             <li class="nav-active"><a href="index.html">首页</a></li>
-            <li v-for="item in headerList" :key='i'><a :href="'route_list.html?cid='+item.cid">{{item.cname}}</a></li>
+            <li v-for="item in headerList"><a :href="'route_list.html?cid='+item.cid">{{item.cname}}</a></li>
             <li><a href="favoriterank.html">收藏排行榜</a></li>
         </ul>
     </div>
