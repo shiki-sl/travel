@@ -2,9 +2,7 @@
 <html>
 <script src="js/vue.js"></script>
 <script>
-    var vm = new Vue({
-
-    })
+    var vm = new Vue({})
 </script>
 <head>
     <meta charset="utf-8">
@@ -87,7 +85,8 @@
                     </li>
                     <li role="presentation">
                         <span></span>
-                        <a href="#newest" onclick="newTour()" aria-controls="newest" role="tab" data-toggle="tab">最新旅游</a>
+                        <a href="#newest" onclick="newTour()" aria-controls="newest" role="tab"
+                           data-toggle="tab">最新旅游</a>
                     </li>
                     <li role="presentation">
                         <span></span>
@@ -100,119 +99,43 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="popularity">
                         <div id="popularity_divs" class="row">
-                            <div class="col-md-3">
+                            <!--人气旅游-->
+                            <div class="col-md-3" v-for="item in hotRankingList">
                                 <a href="javascript:;">
-                                    <img src="images/jiangxuan_4.jpg" alt="">
+                                    <img :src="''+item.rimage" alt="">
                                     <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_4.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_4.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_4.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
+                                        <h3>{{item.rname}}</h3>
+                                        <div class="price">网付价<em>￥</em><strong>{{item.price}}</strong><em>起</em></div>
                                     </div>
                                 </a>
                             </div>
                         </div>
                     </div>
+
                     <div role="tabpanel" class="tab-pane" id="newest">
                         <div class="row">
-                            <div class="col-md-3">
+                            <!--最新旅行-->
+                            <div class="col-md-3" v-for="item in newTourList">
                                 <a href="javascript:;">
-                                    <img src="images/jiangxuan_1.jpg" alt="">
+                                    <img :src="''+item.rimage" alt="">
                                     <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_1.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_1.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_1.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
+                                        <h3>{{item.rname}}</h3>
+                                        <div class="price">网付价<em>￥</em><strong>{{item.price}}</strong><em>起</em></div>
                                     </div>
                                 </a>
                             </div>
                         </div>
                     </div>
+
                     <div role="tabpanel" class="tab-pane" id="theme">
                         <div class="row">
-                            <div class="col-md-3">
+                            <!--主题旅行-->
+                            <div class="col-md-3" v-for="item in themeList">
                                 <a href="javascript:;">
-                                    <img src="images/jiangxuan_2.jpg" alt="">
+                                    <img :src="''+item.rimage" alt="">
                                     <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_2.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_2.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;">
-                                    <img src="images/jiangxuan_2.jpg" alt="">
-                                    <div class="has_border">
-                                        <h3>上海直飞三亚5天4晚自由行(春节预售+亲子/蜜月/休闲游首选+豪华酒店任选+接送机)</h3>
-                                        <div class="price">网付价<em>￥</em><strong>889</strong><em>起</em></div>
+                                        <h3>{{item.rname}}</h3>
+                                        <div class="price">网付价<em>￥</em><strong>{{item.price}}</strong><em>起</em></div>
                                     </div>
                                 </a>
                             </div>
@@ -373,86 +296,30 @@
 </div>
 <!--导入底部-->
 <script>
-    $(function () {
-        popularity();
-        newTour();
-        theme();
+    var vm = new Vue({
+        el: '#index',
+        data: {
+            hotRankingList: [],
+            newTourList: [],
+            themeList: []
+        },
+        methods: {},
+        created() {
+            var _this = this
+            //人气
+            axios.get("routeServlet/hotRankingList").then(function (value) {
+                _this.hotRankingList = value.data
+            })
+            //最新
+            axios.get("routeServlet/newTour").then(function (value) {
+                _this.newTourList = value.data
+            })
+            //主题
+            axios.get("routeServlet/theme").then(function (value) {
+                _this.themeList = value.data
+            })
+        },
     })
-
-    function popularity() {
-        $.getJSON("routeServlet/hotRankingList", {},
-            function (data) {
-                var divs = '';
-                for (var i = 0; i < data.length; i++) {
-                    divs += '<div class="col-md-3">\n' +
-                        '                            <a href="javascript:;">\n' +
-                        '                                <img src="' + data[i].rimage + '" alt="">\n' +
-                        '                                <div class="has_border">\n' +
-                        '                                    <h3>' + data[i].rname + '</h3>\n' +
-                        '                                    <div class="price">网付价<em>￥</em><strong>' + data[i].price + '</strong><em>起</em></div>\n' +
-                        '                                </div>\n' +
-                        '                            </a>\n' +
-                        '                        </div>'
-                }
-                $("#popularity_divs").html(divs);
-                // location.href=("#popularity");
-            }
-        )
-    }
-
-    function newTour() {
-        $.getJSON("routeServlet/newTour", {},
-            function (data) {
-                var divs = '';
-                for (var i = 0; i < data.length; i++) {
-                    divs += '<div class="col-md-3">\n' +
-                        '                            <a href="javascript:;">\n' +
-                        '                                <img src="' + data[i].rimage + '" alt="">\n' +
-                        '                                <div class="has_border">\n' +
-                        '                                    <h3>' + data[i].rname + '</h3>\n' +
-                        '                                    <div class="price">网付价<em>￥</em><strong>' + data[i].price + '</strong><em>起</em></div>\n' +
-                        '                                </div>\n' +
-                        '                            </a>\n' +
-                        '                        </div>'
-                }
-                $("#newest").html(divs);
-            }
-        )
-    }
-
-    function theme() {
-        $.getJSON("routeServlet/theme", {},
-            function (data) {
-                var divs = '';
-                for (var i = 0; i < data.length; i++) {
-                    divs += '<div class="col-md-3">\n' +
-                        '                            <a href="javascript:;">\n' +
-                        '                                <img src="' + data[i].rimage + '" alt="">\n' +
-                        '                                <div class="has_border">\n' +
-                        '                                    <h3>' + data[i].rname + '</h3>\n' +
-                        '                                    <div class="price">网付价<em>￥</em><strong>' + data[i].price + '</strong><em>起</em></div>\n' +
-                        '                                </div>\n' +
-                        '                            </a>\n' +
-                        '                        </div>'
-                }
-                $("#theme").html(divs);
-            }
-        )
-    }
-
-    // var vm = new Vue({
-    //     el: '#index',
-    //     data: {
-    //         list: [],
-    //     },
-    //     methods: {
-    //
-    //     },
-    //     created() {
-    //         var _this = this
-    //         axios.get("categoryServlet/findAll").then(function(value){_this.list=value.data})
-    //     },
-    // })
 
 </script>
 <div id="footer"></div>
